@@ -1,0 +1,36 @@
+{
+    "address_from": {
+        "country": "GR",
+        "zip": "14451",
+        "state": "Attiki",
+        "city": "Athens",
+        "address": "Dimosthenous 1",
+        "company": "COMPANY1",
+        "name": "NAME1",
+        "email": "test1@test.com",
+        "phone": "6900000000"
+    },
+    "address_to": {
+        "country": "DE",
+        "zip": "81667",
+        "state": null,
+        "city": "Munich",
+        "address": "Lothringer 7",
+        "company": "COMPANY2",
+        "name": "NAME2",
+        "email": "test2@test.com",
+        "phone": "+49012345678"
+    },
+    "items": [
+        {
+            "width": 10,
+            "height": 10,
+            "length": 10,
+            "weight": 2000,
+            "label": "Small box",
+            "notes": "Letter",
+            "invoice_lines": []
+        }
+    ],
+    "cash_on_delivery": 0
+}

@@ -1,0 +1,50 @@
+{
+  "compilerOptions": {
+    "types": [
+      "node"
+    ],
+    /** Basic Options **/
+    "allowJs": true,
+    "checkJs": true,
+    "declaration": true,
+    "downlevelIteration": true,
+    "esModuleInterop": true,
+    "forceConsistentCasingInFileNames": true,
+    "lib": [
+      "es2020",
+      "es6"
+    ],
+    "module": "commonjs",
+    "moduleResolution": "node",
+    "outDir": "dist",
+    "sourceMap": true,
+    "inlineSources": true,
+    "target": "es2018",
+    "removeComments": true,
+    "resolveJsonModule": true,
+    /** Strict Type-Checking Options **/
+    "alwaysStrict": false,
+    "noImplicitAny": false,
+    "noImplicitThis": true,
+    "strict": true,
+    "strictFunctionTypes": false,
+    "strictPropertyInitialization": false,
+    "skipLibCheck": true,
+    "suppressImplicitAnyIndexErrors": true,
+    /** Additional Checks **/
+    "noFallthroughCasesInSwitch": true,
+    "noImplicitReturns": true,
+    "noUnusedLocals": true,
+    /** Experimental Options **/
+    "emitDecoratorMetadata": true,
+    "experimentalDecorators": true
+  },
+  "include": [
+    "**/*.ts",
+  ],
+  "exclude": [
+    "node_modules",
+    "dist",
+   "src/db"
+  ]
+}
