@@ -1,12 +1,9 @@
 import { Router } from "express";
-import axios from "axios";
+import createShipment from "../services/DPD";
+
 require("dotenv").config();
 
 const router = Router();
-const username = process.env.USERNAME;
-const password = process.env.PASSWORD;
-
-const API_TEST = `https://lt.integration.dpd.eo.pl/ws-mapper-rest/createShipment_?username=${username}&password=${password}&`;
 
 export default router.post("/", async (req, res) => {
   try {
@@ -21,27 +18,118 @@ export default router.post("/", async (req, res) => {
       parcel_type = "D",
       phone,
     } = dataReceived.address_to;
-    const { width, height, length } = dataReceived.items[0];
-    if (
-      !name ||
-      !address ||
-      !city ||
-      !country ||
-      !zip ||
-      !num_of_parcel ||
-      !parcel_type ||
-      !phone ||
-      !width ||
-      !height ||
-      !length
-    ) {
-      res.json("Please provide all the information");
+    if (dataReceived.items.length > 99) {
+      res.json({
+        error:
+          "Sorry but you are trying to send more than 99 items which is the maximum allowed",
+      });
       return;
     }
-    const { data } = await axios.post(
-      `${API_TEST}name1=${name}&street=${address}&country=${country}&city=${city}&pcode=${zip}&phone=${phone}&num_of_parcel=${num_of_parcel}&parcel_type=${parcel_type}&width=${width}&height=${height}&length=${length}`
+    /// In case there is more than 1 package i calculate the total width
+
+    let width: any = [];
+    let length: any = [];
+    let height: any = [];
+    let weight: any = [];
+    if (dataReceived.items.length > 1 && dataReceived.items.length <= 99) {
+      dataReceived.items.forEach((item) => {
+        width.push(item.width);
+        length.push(item.length);
+        height.push(item.height);
+        weight.push(item.weight);
+      });
+
+      let totalWeight = 0;
+      for (let i = 0; i < weight.length; i++) {
+        totalWeight += weight[i];
+      }
+      weight = totalWeight;
+    }
+    /// In case there is 1 package
+    // const { width, height, length } = dataReceived.items[0];
+
+    const dataFrom = dataReceived.address_from;
+
+    if (!dataFrom.city) {
+      res.json({ Error: "Please provide Senders City" });
+      return;
+    }
+    if (!dataFrom.address) {
+      res.json({ Error: "Please provide Senders Address" });
+      return;
+    }
+    if (!dataFrom.country) {
+      res.json({ Error: "Please provide Senders Country" });
+      return;
+    }
+    if (!dataFrom.name) {
+      res.json({ Error: "Please provide Senders Name" });
+      return;
+    }
+    if (!dataFrom.state) {
+      res.json({ Error: "Please provide Senders State" });
+      return;
+    }
+    if (!dataFrom.zip) {
+      res.json({ Error: "Please provide Senders Zip Code" });
+      return;
+    }
+    if (!phone) {
+      res.json({ Error: "Please provide a Phone Number" });
+      return;
+    }
+    if (!city) {
+      res.json({ Error: "Please provide a City" });
+      return;
+    }
+    if (!country) {
+      res.json({ Error: "Please provide a Country" });
+      return;
+    }
+    if (!name) {
+      res.json("Please provide a Name");
+      return;
+    }
+    if (!zip) {
+      res.json({ Error: "Please provide a Zip Code" });
+      return;
+    }
+    if (!width) {
+      res.json({ Error: "Please provide width" });
+      return;
+    }
+    if (!height) {
+      res.json({ Error: "Please provide a Height for your Item" });
+      return;
+    }
+    if (!length) {
+      res.json({ Error: "Please provide length" });
+      return;
+    }
+    if (!address) {
+      res.json({ Error: "Please provide address" });
+      return;
+    }
+    if (!weight) {
+      res.json({ Error: "Please provide the weight" });
+      return;
+    }
+
+    const response = await createShipment(
+      name,
+      address,
+      country,
+      city,
+      zip,
+      phone,
+      num_of_parcel,
+      parcel_type,
+      width,
+      height,
+      length,
+      weight
     );
-    res.json(data);
+    res.json(response);
   } catch (error) {
     res.json(error);
   }
